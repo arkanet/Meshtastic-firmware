@@ -6,6 +6,7 @@ on:
       - 'TFT-SPI-480×320'
     paths:
       - '.github/workflows/heltec-tft-baseline.yml'
+      - '.github/constraints/**'
       - 'src/**'
       - 'lib/**'
       - 'extra_scripts/**'
@@ -24,6 +25,9 @@ concurrency:
 jobs:
   compile:
     runs-on: [self-hosted, Linux, X64]
+    env:
+      # Applied by uv in pioarduino's nested HybridCompile environment.
+      UV_CONSTRAINT: ${{ github.workspace }}/.github/constraints/pioarduino-hybrid.txt
     timeout-minutes: 120
     steps:
       - uses: actions/checkout@v4
@@ -35,7 +39,10 @@ jobs:
         run: |
           python3 -m venv "$RUNNER_TEMP/pio-venv"
           "$RUNNER_TEMP/pio-venv/bin/python" -m pip install --upgrade pip
-          "$RUNNER_TEMP/pio-venv/bin/python" -m pip install "platformio>=6.2.0,<7"
+          "$RUNNER_TEMP/pio-venv/bin/python" -m pip install "platformio==6.2.0"
+          "$RUNNER_TEMP/pio-venv/bin/pio" --version
+          echo "Nested HybridCompile constraint: $UV_CONSTRAINT"
+          cat "$UV_CONSTRAINT"
           echo "$RUNNER_TEMP/pio-venv/bin" >> "$GITHUB_PATH"
       - name: Compile heltec-v4-tft
         shell: bash
