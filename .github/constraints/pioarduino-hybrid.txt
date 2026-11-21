@@ -1,0 +1,5 @@
+# Workaround for pioarduino/platform-espressif32 issue #563.
+# HybridCompile's nested uv environment otherwise installs 6.2.0.post1,
+# which the ESP32 platform's >=6.2.0 semantic-version check rejects.
+# Remove when the pinned platform release accepts 6.2.0-post.1.
+pioarduino==6.2.0
