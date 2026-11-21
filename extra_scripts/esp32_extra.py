@@ -3,13 +3,28 @@
 # trunk-ignore-all(flake8/F821): For SConstruct imports
 # trunk-ignore-all(ruff/E402): Hacky esptool import
 # trunk-ignore-all(flake8/E402): Hacky esptool import
+import os
 import sys
 from os.path import join
 
 Import("env")
 platform = env.PioPlatform()
 
-sys.path.append(join(platform.get_package_dir("tool-esptoolpy")))
+# New pioarduino ESP32 platforms can install esptool in the global
+# PlatformIO tools directory rather than as a platform-owned package.
+# Keep the original package lookup for older PlatformIO installations.
+esptool_dir = platform.get_package_dir("tool-esptoolpy")
+if not esptool_dir:
+    core_dir = os.environ.get(
+        "PLATFORMIO_CORE_DIR", join(os.path.expanduser("~"), ".platformio")
+    )
+    esptool_dir = join(core_dir, "tools", "tool-esptoolpy")
+if not os.path.isdir(esptool_dir):
+    raise FileNotFoundError(
+        f"PlatformIO esptool package not found: {esptool_dir}. "
+        "Verify that the ESP32 platform tool dependencies are installed."
+    )
+sys.path.insert(0, esptool_dir)
 # IntelHex workaround, remove after fixed upstream
 # https://github.com/platformio/platform-espressif32/issues/1632
 try:
