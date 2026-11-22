@@ -49,7 +49,7 @@ jobs:
         run: |
           python3 -m venv "$RUNNER_TEMP/pio-venv"
           "$RUNNER_TEMP/pio-venv/bin/python" -m pip install --upgrade pip
-          "$RUNNER_TEMP/pio-venv/bin/python" -m pip install "platformio==6.2.0"
+          "$RUNNER_TEMP/pio-venv/bin/python" -m pip install "platformio==6.2.0" "scons>=4.8,<5"
           "$RUNNER_TEMP/pio-venv/bin/pio" --version
           echo "Nested HybridCompile constraint: $UV_CONSTRAINT"
           cat "$UV_CONSTRAINT"
