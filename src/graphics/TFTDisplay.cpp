@@ -23,7 +23,12 @@ uint16_t TFT_MESH = TFT_MESH_OVERRIDE;
 uint16_t TFT_MESH = COLOR565(0x67, 0xEA, 0x94);
 #endif
 
-#if defined(CO5300_CS)
+#if defined(HELTEC_V4_R2_ILI9488)
+#include "graphics/LGFX/LGFX_GENERIC.h"
+using LGFX = LGFX_GENERIC;
+static LGFX *tft = nullptr;
+
+#elif defined(CO5300_CS)
 #include <LovyanGFX.hpp> // Graphics and font library for AMOLED driver chip
 
 // Panel_CO5300's init table sends Sleep Out and Display On with zero delay. The CO5300 needs up
