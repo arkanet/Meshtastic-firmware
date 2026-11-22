@@ -20,7 +20,7 @@ permissions:
 
 concurrency:
   group: baseline-${{ github.repository }}-${{ github.ref }}
-  cancel-in-progress: false
+  cancel-in-progress: true
 
 jobs:
   compile:
